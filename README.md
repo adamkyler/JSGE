@@ -1,2 +1,0 @@
-# JSGE
-JavaScript Game Engine
