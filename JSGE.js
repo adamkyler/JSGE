@@ -10,6 +10,8 @@
  */
 
 
+var JSGE_MAX_TICK_DISTANCE = 10;
+
 function JSGE(canvas){
 	
 	//Get a handle on the canvas, create context
@@ -42,8 +44,15 @@ JSGE.prototype.setTimer = function(cb,dur){
 //Called after timer is set, passes elapsed time to callback function
 JSGE.prototype.tick = function(){
 	var cTime = new Date().getTime();
-	this.tickCb(cTime-this.lastTime);
+	var dif = cTime-this.lastTime;
 	this.lastTime = cTime;
+	
+	//Skip if there is a large enough time difference
+	if(dif>JSGE_MAX_TICK_DISTANCE){return;}
+	
+	//Else pass through to the callback
+	this.tickCb(dif);
+	
 }
 
 
@@ -64,6 +73,12 @@ JSGE.prototype.hasAlert = function(){
 //Returns the context for drawing 
 JSGE.prototype.getCtx = function(){
 	return this.ctx;
+}
+JSGE.prototype.expandCanvas = function(){
+	this.canvas.style.width ='100%';
+	this.canvas.style.height='100%';
+	this.canvas.width = this.canvas.offsetWidth;
+	this.canvas.height = this.canvas.offsetHeight;
 }
 
 
